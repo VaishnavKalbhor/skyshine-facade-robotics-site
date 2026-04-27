@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-skyshine-bg text-slate-200 antialiased;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(34, 211, 238, 0.14), transparent 30%),
+    radial-gradient(circle at 90% 0%, rgba(129, 140, 248, 0.15), transparent 35%),
+    linear-gradient(180deg, #040712 0%, #050916 45%, #05070f 100%);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
+  z-index: -1;
+}
+
+.section-container {
+  @apply mx-auto w-full max-w-7xl px-6 py-20 md:px-10 md:py-24 lg:px-14;
+}
+
+.glass-card {
+  @apply rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 60px rgba(2, 10, 28, 0.6);
+}
+
+.section-title {
+  @apply text-3xl font-semibold tracking-tight text-slate-100 md:text-4xl;
+}
+
+.section-subtitle {
+  @apply mt-4 max-w-3xl text-base text-slate-300 md:text-lg;
+}
+
+.section-divider {
+  @apply mx-auto h-px w-[92%] max-w-7xl;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(56, 189, 248, 0.35) 20%,
+    rgba(129, 140, 248, 0.4) 50%,
+    rgba(56, 189, 248, 0.35) 80%,
+    transparent 100%
+  );
+}
+
+.hero-glow {
+  position: absolute;
+  width: 34rem;
+  height: 34rem;
+  border-radius: 9999px;
+  filter: blur(110px);
+  pointer-events: none;
+  z-index: -1;
+}
