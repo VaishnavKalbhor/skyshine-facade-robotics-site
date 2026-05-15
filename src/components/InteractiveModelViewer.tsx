@@ -1,6 +1,7 @@
-import { Suspense, Component, useMemo, type ErrorInfo, type ReactNode } from 'react'
+import { Suspense, Component, useEffect, useMemo, type ErrorInfo, type ReactNode } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Bounds, Environment, OrbitControls, useGLTF } from '@react-three/drei'
+import { Bounds, OrbitControls, useGLTF } from '@react-three/drei'
+import type { Material, Object3D } from 'three'
 
 /** Served from `public/models/` — update this path if you replace the file. */
 export const SKYSHINE_ROBOT_GLB_URL = '/models/skyshine-robot.glb'
@@ -34,14 +35,32 @@ function PlaceholderModel() {
 function LoadedRobot() {
   const { scene } = useGLTF(SKYSHINE_ROBOT_GLB_URL)
   const model = useMemo(() => scene.clone(true), [scene])
+
+  useEffect(() => {
+    return () => {
+      model.traverse((object: Object3D) => {
+        const mesh = object as Object3D & {
+          geometry?: { dispose: () => void }
+          material?: Material | Material[]
+        }
+
+        mesh.geometry?.dispose()
+
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach((material) => material.dispose())
+        } else {
+          mesh.material?.dispose()
+        }
+      })
+    }
+  }, [model])
+
   return (
     <Bounds fit clip observe margin={1.25}>
       <primitive object={model} />
     </Bounds>
   )
 }
-
-useGLTF.preload(SKYSHINE_ROBOT_GLB_URL)
 
 type ModelErrorBoundaryProps = { children: ReactNode; fallback: ReactNode }
 type ModelErrorBoundaryState = { hasError: boolean }
@@ -64,26 +83,36 @@ class ModelErrorBoundary extends Component<ModelErrorBoundaryProps, ModelErrorBo
 }
 
 export default function InteractiveModelViewer({ className = '' }: InteractiveModelViewerProps) {
+  useEffect(() => {
+    return () => {
+      useGLTF.clear(SKYSHINE_ROBOT_GLB_URL)
+    }
+  }, [])
+
   return (
     <div className={`relative overflow-hidden rounded-3xl border border-skyshine-border bg-white/80 ${className}`}>
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(83,199,179,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(83,199,179,0.12)_1px,transparent_1px)] bg-[size:36px_36px]" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-skyshine-mint/60 via-transparent to-skyshine-surface/70" />
 
       <div className="relative h-[360px] md:h-[520px] lg:h-[640px]">
-        <Canvas camera={{ position: [0, 1.2, 4.2], fov: 45 }} gl={{ antialias: true, alpha: true }}>
-          <ambientLight intensity={0.22} />
-          <directionalLight position={[4, 7, 3]} intensity={0.52} color="#b8d9d2" />
-          <directionalLight position={[-4, 3, -2]} intensity={0.28} color="#4a9e8f" />
-          <directionalLight position={[0, -5, 3]} intensity={0.12} color="#2d7a6c" />
+        <Canvas
+          camera={{ position: [0, 1.2, 4.2], fov: 45 }}
+          dpr={[1, 1.5]}
+          frameloop="demand"
+          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+          shadows={false}
+        >
+          <ambientLight intensity={0.28} />
+          <directionalLight position={[4, 7, 3]} intensity={0.55} color="#b8d9d2" />
+          <directionalLight position={[-3, 2, -2]} intensity={0.18} color="#4a9e8f" />
 
           <Suspense fallback={<PlaceholderModel />}>
             <ModelErrorBoundary fallback={<PlaceholderModel />}>
               <LoadedRobot />
             </ModelErrorBoundary>
-            <Environment preset="city" environmentIntensity={0.38} />
           </Suspense>
 
-          <OrbitControls enablePan enableZoom enableRotate autoRotate={false} autoRotateSpeed={0.75} />
+          <OrbitControls enablePan enableZoom enableRotate autoRotate={false} />
         </Canvas>
       </div>
 

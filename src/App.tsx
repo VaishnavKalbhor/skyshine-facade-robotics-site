@@ -1,7 +1,9 @@
+import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { AlertTriangle, BarChart3, Bot, CheckCircle2, Leaf, Radar, Shield, Sparkles, Workflow, Wrench } from 'lucide-react'
 import { AnimatedSection, StaggerContainer, StaggerItem } from './components/Animated'
-import InteractiveModelViewer from './components/InteractiveModelViewer'
+
+const InteractiveModelViewer = lazy(() => import('./components/InteractiveModelViewer'))
 
 type IconCard = { title: string; description: string; icon: LucideIcon }
 
@@ -45,6 +47,87 @@ const useCaseCards = [
   ['Hotels and Mixed-Use Buildings', 'Keep visible exteriors clean with minimal operational disruption.'],
   ['Facility Portfolios', 'Standardize recurring facade maintenance across multiple assets.'],
 ]
+
+function useInViewport(rootMargin = '900px') {
+  const ref = useRef<HTMLDivElement | null>(null)
+  const [isInViewportRange, setIsInViewportRange] = useState(false)
+
+  useEffect(() => {
+    const element = ref.current
+    if (!element) return
+
+    if (!('IntersectionObserver' in window)) {
+      setIsInViewportRange(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInViewportRange(entry.isIntersecting)
+      },
+      { rootMargin },
+    )
+
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [rootMargin])
+
+  return { ref, isInViewportRange }
+}
+
+function ModelViewerShell() {
+  const { ref, isInViewportRange } = useInViewport()
+  const [hasRequestedModel, setHasRequestedModel] = useState(false)
+  const shouldMountViewer = hasRequestedModel && isInViewportRange
+
+  return (
+    <div ref={ref}>
+      {shouldMountViewer ? (
+        <Suspense fallback={<ModelViewerPlaceholder />}>
+          <InteractiveModelViewer />
+        </Suspense>
+      ) : (
+        <ModelViewerPlaceholder hasRequestedModel={hasRequestedModel} onExplore={() => setHasRequestedModel(true)} />
+      )}
+    </div>
+  )
+}
+
+function ModelViewerPlaceholder({ hasRequestedModel = false, onExplore }: { hasRequestedModel?: boolean; onExplore?: () => void }) {
+  return (
+    <div className="relative h-[360px] overflow-hidden rounded-3xl border border-skyshine-border bg-white/80 md:h-[520px] lg:h-[640px]">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(83,199,179,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(83,199,179,0.12)_1px,transparent_1px)] bg-[size:36px_36px]" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-skyshine-mint/60 via-transparent to-skyshine-surface/70" />
+      <img
+        src={MEDIA.robotScene}
+        alt="SkyShine robot preview"
+        className="absolute inset-0 h-full w-full object-contain p-8 opacity-95 md:p-12"
+        loading="lazy"
+        decoding="async"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/20 to-transparent" />
+      <div className="relative flex h-full items-end px-4 pb-4 sm:px-6 sm:pb-6">
+        <div className="flex w-full flex-col gap-3 rounded-xl border border-skyshine-border bg-white/90 px-4 py-3 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-base font-medium text-skyshine-text">Interactive 3D Robot Model</p>
+            <p className="mt-1 text-sm text-skyshine-muted">
+              {hasRequestedModel ? 'The 3D viewer is paused while this section is away from view.' : 'Load the full model only when you want to inspect it.'}
+            </p>
+          </div>
+          {onExplore ? (
+            <button
+              type="button"
+              onClick={onExplore}
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-skyshine-teal px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-skyshine-tealDark"
+            >
+              Explore in 3D
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function App() {
   return (
@@ -177,7 +260,7 @@ export default function App() {
             </p>
           </AnimatedSection>
           <AnimatedSection className="mt-10">
-            <InteractiveModelViewer />
+            <ModelViewerShell />
           </AnimatedSection>
         </section>
         <div className="section-divider" />
@@ -315,7 +398,7 @@ export default function App() {
             <p className="font-semibold text-skyshine-text">SkyShine</p>
             <p>Autonomous facade-cleaning robots for safer and smarter cities.</p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             {['Problem', 'Solution', '3D Robot', 'Technology', 'Contact'].map((item) => (
               <a key={item} href={`#${item.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-skyshine-tealDark">
                 {item}
