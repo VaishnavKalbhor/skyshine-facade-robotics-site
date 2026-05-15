@@ -101,6 +101,10 @@ Open the shown local URL to preview the production version.
 
 ```text
 High_Tech_Entreprenurship/
+  Images and 3d Model/     ← optional: your original uploads (not required to run the site)
+  public/
+    media/                 ← PNG images served to the browser
+    models/                ← skyshine-robot.glb (compressed) + skyshine-robot.usdz
   src/
     App.tsx
     main.tsx
@@ -108,7 +112,6 @@ High_Tech_Entreprenurship/
     components/
       Animated.tsx
       InteractiveModelViewer.tsx
-  public/
   index.html
   tailwind.config.js
   vite.config.ts
@@ -117,22 +120,51 @@ High_Tech_Entreprenurship/
 
 ---
 
-## 8) 3D robot model integration (when model is ready)
+## 8) 3D model and images (already integrated)
 
-Current viewer is a safe placeholder (no broken loader).
+The site loads assets from `public/` (this is the standard Vite way).
 
-When final model is available:
+### 3D model (Web)
 
-1. Put model file here:
-   - `public/models/skyshine-robot.glb`
-2. Open:
-   - `src/components/InteractiveModelViewer.tsx`
-3. Follow the in-file comments under **FUTURE MODEL INTEGRATION** to switch from placeholder to real model loading.
+- **File used:** `public/models/skyshine-robot.glb` (replace this file when you update the robot; source in repo: `Images and 3d Model/3DModel1-compressed.glb`)
+- **Loader code:** `src/components/InteractiveModelViewer.tsx` (`useGLTF` from `@react-three/drei`)
+- **To replace the robot later:** overwrite `public/models/skyshine-robot.glb` with your new file (keep the same filename), or change `SKYSHINE_ROBOT_GLB_URL` in that file.
 
-Supported planned formats:
+### AR on iPhone / iPad (optional)
 
-- `.glb`
-- `.gltf`
+- **File used:** `public/models/skyshine-robot.usdz` (copied from `Images and 3d Model/3DModel3.usdz`)
+- The viewer shows a **View in AR (iOS)** link (Apple Quick Look).
+
+### Marketing / UI images
+
+These are copied into `public/media/` and referenced in `src/App.tsx`:
+
+- `image-no-bg.png`, `image-hd.png`, `map.png`, `image-ny.png`, `image-unicredit.png`, `image-no-bg-copia.png`
+
+### If you add new files to `Images and 3d Model/` later
+
+Re-copy them into `public/media/` or `public/models/` (same filenames as above), or update the paths in `src/App.tsx` / `InteractiveModelViewer.tsx`.
+
+**Windows (PowerShell) example — refresh assets from your upload folder:**
+
+```powershell
+cd "C:\Polimi\High_Tech_Entreprenurship"
+New-Item -ItemType Directory -Force -Path "public\models","public\media" | Out-Null
+Copy-Item "Images and 3d Model\3DModel1-compressed.glb" "public\models\skyshine-robot.glb" -Force
+Copy-Item "Images and 3d Model\3DModel3.usdz" "public\models\skyshine-robot.usdz" -Force
+Copy-Item "Images and 3d Model\image_hd.png" "public\media\image-hd.png" -Force
+Copy-Item "Images and 3d Model\image_no_bg.png" "public\media\image-no-bg.png" -Force
+Copy-Item "Images and 3d Model\map.png" "public\media\map.png" -Force
+Copy-Item "Images and 3d Model\Image_ny.png" "public\media\image-ny.png" -Force
+Copy-Item "Images and 3d Model\Image_unicredit.png" "public\media\image-unicredit.png" -Force
+```
+
+Note: the `.glb` can be large; the first load in the browser may take a few seconds on slower connections.
+
+Supported formats in the viewer:
+
+- `.glb` / `.gltf` for the Three.js viewer
+- `.usdz` is only for iOS AR (not rendered inside the Three.js canvas)
 
 ---
 

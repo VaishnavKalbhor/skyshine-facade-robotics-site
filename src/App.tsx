@@ -7,6 +7,14 @@ type IconCard = { title: string; description: string; icon: LucideIcon }
 
 const navItems = ['Problem', 'Solution', '3D Robot', 'Technology', 'Benefits', 'Use Cases', 'Safety', 'Contact']
 
+/** Static images copied to `public/media/` from your `Images and 3d Model` folder. */
+const MEDIA = {
+  robotScene: '/media/image-hd.png',
+  map: '/media/map.png',
+  cityNy: '/media/image-ny.png',
+  cityMilan: '/media/image-unicredit.png',
+} as const
+
 const problemCards: IconCard[] = [
   { title: 'High-Altitude Risk', description: 'Facade crews often work in hazardous conditions on ropes and suspended platforms.', icon: AlertTriangle },
   { title: 'Costly Operations', description: 'Labour-heavy workflows can increase operating costs and scheduling complexity.', icon: Workflow },
@@ -100,7 +108,15 @@ export default function App() {
             <AnimatedSection className="glass-card relative overflow-hidden p-8 md:p-10" delay={0.12}>
               <div className="absolute inset-0 bg-gradient-to-br from-skyshine-mint/70 via-transparent to-skyshine-surface/70" />
               <div className="relative space-y-4">
-                <div className="h-56 rounded-2xl border border-skyshine-border bg-[linear-gradient(120deg,rgba(83,199,179,0.22),rgba(255,255,255,0.85))]" />
+                <div className="overflow-hidden rounded-2xl border border-skyshine-border bg-white">
+                  <img
+                    src={MEDIA.robotScene}
+                    alt="SkyShine autonomous facade-cleaning robot on a glass tower"
+                    className="h-56 w-full object-contain p-4 md:h-64"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-xl border border-skyshine-border bg-white p-4">
                     <p className="text-sm text-skyshine-muted">Robotics + AI Navigation</p>
@@ -157,7 +173,7 @@ export default function App() {
           <AnimatedSection>
             <h2 className="section-title">Explore the SkyShine Robot in 3D</h2>
             <p className="section-subtitle">
-              Our website is prepared for an interactive 3D model of the SkyShine facade-cleaning robot. Once the final model is added, visitors will be able to rotate, zoom, and inspect the robot directly in the browser.
+              Explore the SkyShine robot in the browser: rotate, zoom, and inspect the model. On supported iPhones and iPads, you can also open the USDZ in AR from the viewer bar.
             </p>
           </AnimatedSection>
           <AnimatedSection className="mt-10">
@@ -182,6 +198,17 @@ export default function App() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+          <AnimatedSection className="mt-10">
+            <div className="overflow-hidden rounded-2xl border border-skyshine-border bg-white shadow-sm">
+              <img
+                src={MEDIA.robotScene}
+                alt="SkyShine robot operating on a high-rise glass facade"
+                className="max-h-[22rem] w-full object-cover object-center"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </AnimatedSection>
         </section>
         <div className="section-divider" />
 
@@ -217,6 +244,22 @@ export default function App() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+          <AnimatedSection className="mt-12">
+            <div className="grid gap-4 md:grid-cols-3">
+              <figure className="overflow-hidden rounded-2xl border border-skyshine-border bg-white shadow-sm">
+                <img src={MEDIA.cityNy} alt="Skyline reference for tall-building environments" className="h-44 w-full object-cover md:h-52" loading="lazy" decoding="async" />
+                <figcaption className="px-3 py-2 text-xs text-skyshine-muted">High-rise environments</figcaption>
+              </figure>
+              <figure className="overflow-hidden rounded-2xl border border-skyshine-border bg-white shadow-sm">
+                <img src={MEDIA.map} alt="Urban map context for high-rise maintenance" className="h-44 w-full object-cover md:h-52" loading="lazy" decoding="async" />
+                <figcaption className="px-3 py-2 text-xs text-skyshine-muted">Dense urban cores</figcaption>
+              </figure>
+              <figure className="overflow-hidden rounded-2xl border border-skyshine-border bg-white shadow-sm">
+                <img src={MEDIA.cityMilan} alt="Modern glass facade in a European city" className="h-44 w-full object-cover md:h-52" loading="lazy" decoding="async" />
+                <figcaption className="px-3 py-2 text-xs text-skyshine-muted">Glass-heavy facades</figcaption>
+              </figure>
+            </div>
+          </AnimatedSection>
         </section>
         <div className="section-divider" />
 

@@ -14,6 +14,10 @@ export default {
           text: '#071817',
           muted: '#4b5f5c',
           border: '#d7ece8',
+          /** 3D viewer: dark surface in the same teal family as the brand */
+          viewer: '#0a1412',
+          viewerDeep: '#060d0c',
+          viewerLine: '#1a2e2a',
         },
       },
       boxShadow: {
