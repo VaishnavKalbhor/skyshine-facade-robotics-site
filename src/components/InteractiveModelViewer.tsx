@@ -4,10 +4,12 @@ import { Bounds, OrbitControls, useGLTF } from '@react-three/drei'
 import type { Material, Object3D } from 'three'
 
 /** Served from `public/models/` — update this path if you replace the file. */
-export const SKYSHINE_ROBOT_GLB_URL = import.meta.env.VITE_SKYSHINE_ROBOT_GLB_URL || ''
+export const SKYSHINE_ROBOT_GLB_URL =
+  'https://raw.githubusercontent.com/VaishnavKalbhor/skyshine-facade-robotics-site/main/Images%20and%203d%20Model/3DModel1-compressed.glb'
 
 /** Optional Quick Look (iOS). File: `public/models/skyshine-robot.usdz` */
-export const SKYSHINE_ROBOT_USDZ_URL = import.meta.env.VITE_SKYSHINE_ROBOT_USDZ_URL || ''
+export const SKYSHINE_ROBOT_USDZ_URL =
+  'https://raw.githubusercontent.com/VaishnavKalbhor/skyshine-facade-robotics-site/main/Images%20and%203d%20Model/3DModel3.usdz'
 
 type InteractiveModelViewerProps = {
   className?: string
