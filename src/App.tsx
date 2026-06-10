@@ -18,6 +18,7 @@ const MEDIA = {
   safetyGraph: '/media/safety-maintenance-graph.png',
   marketGraph: '/media/cleaning-robot-market-graph.png',
   robotDemo: '/media/skyshine-robot-demo.mp4',
+  modelPreviewVideo: '/media/demo-video.mp4',
 } as const
 
 const problemCards: IconCard[] = [
@@ -101,13 +102,18 @@ function ModelViewerPlaceholder({ hasRequestedModel = false, onExplore }: { hasR
     <div className="relative h-[360px] overflow-hidden rounded-3xl border border-skyshine-border bg-white/80 md:h-[520px] lg:h-[640px]">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(83,199,179,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(83,199,179,0.12)_1px,transparent_1px)] bg-[size:36px_36px]" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-skyshine-mint/60 via-transparent to-skyshine-surface/70" />
-      <img
-        src={MEDIA.robotScene}
-        alt="SkyShine robot preview"
-        className="absolute inset-0 h-full w-full object-contain p-8 opacity-95 md:p-12"
-        loading="lazy"
-        decoding="async"
-      />
+      <video
+        className="absolute inset-0 h-full w-full object-cover opacity-95"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        poster={MEDIA.robotScene}
+        aria-label="SkyShine robot preview video"
+      >
+        <source src={MEDIA.modelPreviewVideo} type="video/mp4" />
+      </video>
       <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/20 to-transparent" />
       <div className="relative flex h-full items-end px-4 pb-4 sm:px-6 sm:pb-6">
         <div className="flex w-full flex-col gap-3 rounded-xl border border-skyshine-border bg-white/90 px-4 py-3 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
