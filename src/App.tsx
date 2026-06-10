@@ -7,7 +7,7 @@ const InteractiveModelViewer = lazy(() => import('./components/InteractiveModelV
 
 type IconCard = { title: string; description: string; icon: LucideIcon }
 
-const navItems = ['Problem', 'Solution', '3D Robot', 'Technology', 'Benefits', 'Use Cases', 'Safety', 'Contact']
+const navItems = ['3D Robot', 'Problem', 'Solution', 'Technology', 'Benefits', 'Use Cases', 'Safety', 'Contact']
 
 /** Static images copied to `public/media/` from your `Images and 3d Model` folder. */
 const MEDIA = {
@@ -15,6 +15,9 @@ const MEDIA = {
   map: '/media/map.png',
   cityNy: '/media/image-ny.png',
   cityMilan: '/media/image-unicredit.png',
+  safetyGraph: '/media/safety-maintenance-graph.png',
+  marketGraph: '/media/cleaning-robot-market-graph.png',
+  robotDemo: '/media/skyshine-robot-demo.mp4',
 } as const
 
 const problemCards: IconCard[] = [
@@ -195,7 +198,7 @@ export default function App() {
                   <img
                     src={MEDIA.robotScene}
                     alt="SkyShine autonomous facade-cleaning robot on a glass tower"
-                    className="h-56 w-full object-contain p-4 md:h-64"
+                    className="h-64 w-full object-contain p-3 md:h-80 lg:h-96"
                     loading="eager"
                     decoding="async"
                   />
@@ -211,6 +214,19 @@ export default function App() {
               </div>
             </AnimatedSection>
           </div>
+        </section>
+        <div className="section-divider" />
+
+        <section id="3d-robot" className="section-container">
+          <AnimatedSection>
+            <h2 className="section-title">Explore the SkyShine Robot in 3D</h2>
+            <p className="section-subtitle">
+              Explore the SkyShine robot in the browser: rotate, zoom, and inspect the model. On supported iPhones and iPads, you can also open the USDZ in AR from the viewer bar.
+            </p>
+          </AnimatedSection>
+          <AnimatedSection className="mt-10">
+            <ModelViewerShell />
+          </AnimatedSection>
         </section>
         <div className="section-divider" />
 
@@ -230,6 +246,17 @@ export default function App() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+          <AnimatedSection className="mt-10">
+            <figure className="overflow-hidden rounded-2xl border border-skyshine-border bg-white shadow-sm">
+              <img
+                src={MEDIA.safetyGraph}
+                alt="EU workplace safety data showing fatal work accidents and construction share"
+                className="w-full object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          </AnimatedSection>
         </section>
         <div className="section-divider" />
 
@@ -252,19 +279,6 @@ export default function App() {
         </section>
         <div className="section-divider" />
 
-        <section id="3d-robot" className="section-container">
-          <AnimatedSection>
-            <h2 className="section-title">Explore the SkyShine Robot in 3D</h2>
-            <p className="section-subtitle">
-              Explore the SkyShine robot in the browser: rotate, zoom, and inspect the model. On supported iPhones and iPads, you can also open the USDZ in AR from the viewer bar.
-            </p>
-          </AnimatedSection>
-          <AnimatedSection className="mt-10">
-            <ModelViewerShell />
-          </AnimatedSection>
-        </section>
-        <div className="section-divider" />
-
         <section id="technology" className="section-container">
           <AnimatedSection>
             <h2 className="section-title">Technology Platform</h2>
@@ -283,13 +297,18 @@ export default function App() {
           </StaggerContainer>
           <AnimatedSection className="mt-10">
             <div className="overflow-hidden rounded-2xl border border-skyshine-border bg-white shadow-sm">
-              <img
-                src={MEDIA.robotScene}
-                alt="SkyShine robot operating on a high-rise glass facade"
-                className="max-h-[22rem] w-full object-cover object-center"
-                loading="lazy"
-                decoding="async"
-              />
+              <video
+                className="max-h-[32rem] w-full object-cover object-center"
+                controls
+                muted
+                playsInline
+                preload="metadata"
+                poster={MEDIA.robotScene}
+                aria-label="SkyShine robot operation demo video"
+              >
+                <source src={MEDIA.robotDemo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </AnimatedSection>
         </section>
@@ -309,6 +328,17 @@ export default function App() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+          <AnimatedSection className="mt-10">
+            <figure className="overflow-hidden rounded-2xl border border-skyshine-border bg-white shadow-sm">
+              <img
+                src={MEDIA.marketGraph}
+                alt="Cleaning robot market growth chart with projected CAGR"
+                className="w-full object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          </AnimatedSection>
         </section>
         <div className="section-divider" />
 
