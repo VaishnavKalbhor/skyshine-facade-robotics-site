@@ -4,10 +4,10 @@ import { Bounds, OrbitControls, useGLTF } from '@react-three/drei'
 import type { Material, Object3D } from 'three'
 
 /** Served from `public/models/` — update this path if you replace the file. */
-export const SKYSHINE_ROBOT_GLB_URL = '/models/skyshine-robot.glb'
+export const SKYSHINE_ROBOT_GLB_URL = import.meta.env.VITE_SKYSHINE_ROBOT_GLB_URL || ''
 
 /** Optional Quick Look (iOS). File: `public/models/skyshine-robot.usdz` */
-export const SKYSHINE_ROBOT_USDZ_URL = '/models/skyshine-robot.usdz'
+export const SKYSHINE_ROBOT_USDZ_URL = import.meta.env.VITE_SKYSHINE_ROBOT_USDZ_URL || ''
 
 type InteractiveModelViewerProps = {
   className?: string
@@ -33,7 +33,15 @@ function PlaceholderModel() {
 }
 
 function LoadedRobot() {
-  const { scene } = useGLTF(SKYSHINE_ROBOT_GLB_URL)
+  if (!SKYSHINE_ROBOT_GLB_URL) {
+    return <PlaceholderModel />
+  }
+
+  return <RemoteRobot url={SKYSHINE_ROBOT_GLB_URL} />
+}
+
+function RemoteRobot({ url }: { url: string }) {
+  const { scene } = useGLTF(url)
   const model = useMemo(() => scene.clone(true), [scene])
 
   useEffect(() => {
@@ -121,13 +129,15 @@ export default function InteractiveModelViewer({ className = '' }: InteractiveMo
           <p className="text-base font-medium text-skyshine-text">Interactive 3D Robot Model</p>
           <p className="mt-1 text-sm text-skyshine-muted">Drag to orbit, scroll to zoom, right-drag to pan.</p>
         </div>
-        <a
-          href={SKYSHINE_ROBOT_USDZ_URL}
-          rel="ar"
-          className="inline-flex shrink-0 items-center justify-center rounded-full border border-skyshine-border bg-skyshine-surface px-3 py-2 text-xs font-semibold text-skyshine-tealDark transition hover:-translate-y-0.5 hover:shadow-glow"
-        >
-          View in AR (iOS)
-        </a>
+        {SKYSHINE_ROBOT_USDZ_URL ? (
+          <a
+            href={SKYSHINE_ROBOT_USDZ_URL}
+            rel="ar"
+            className="inline-flex shrink-0 items-center justify-center rounded-full border border-skyshine-border bg-skyshine-surface px-3 py-2 text-xs font-semibold text-skyshine-tealDark transition hover:-translate-y-0.5 hover:shadow-glow"
+          >
+            View in AR (iOS)
+          </a>
+        ) : null}
       </div>
     </div>
   )
