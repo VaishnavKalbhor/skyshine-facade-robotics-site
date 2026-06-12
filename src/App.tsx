@@ -204,7 +204,7 @@ export default function App() {
                   <img
                     src={MEDIA.robotScene}
                     alt="SkyShine autonomous facade-cleaning robot on a glass tower"
-                    className="h-80 w-full object-contain p-2 md:h-[26rem] lg:h-[32rem]"
+                    className="h-80 w-full object-cover object-[70%_center] md:h-[26rem] lg:h-[32rem]"
                     loading="eager"
                     decoding="async"
                   />
