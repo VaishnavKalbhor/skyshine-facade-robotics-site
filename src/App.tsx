@@ -197,14 +197,14 @@ export default function App() {
                 </div>
               </AnimatedSection>
             </div>
-            <AnimatedSection className="glass-card relative overflow-hidden p-8 md:p-10" delay={0.12}>
+            <AnimatedSection className="glass-card relative overflow-hidden p-6 md:p-8" delay={0.12}>
               <div className="absolute inset-0 bg-gradient-to-br from-skyshine-mint/70 via-transparent to-skyshine-surface/70" />
               <div className="relative space-y-4">
                 <div className="overflow-hidden rounded-2xl border border-skyshine-border bg-white">
                   <img
                     src={MEDIA.robotScene}
                     alt="SkyShine autonomous facade-cleaning robot on a glass tower"
-                    className="h-64 w-full object-contain p-3 md:h-80 lg:h-96"
+                    className="h-80 w-full object-contain p-2 md:h-[26rem] lg:h-[32rem]"
                     loading="eager"
                     decoding="async"
                   />
